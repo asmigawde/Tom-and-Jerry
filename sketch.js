@@ -1,80 +1,72 @@
-var canvas;
-var block1,block2,block3,block4;
-var ball, edges;
-var music;
+var bg;
+var together;
+var tom,tomImg1,tomImg2; 
+var jerry,jerryImg1,jerryImg2;
 
-function preload(){
-    // load sound here
-    block1=loadSound("music.mp3");
-    block2=loadSound("music.mp3");
-    block3=loadSound("music.mp3");
-    block4=loadSound("music.mp3");
 
+function preload() {
+    //load the images here
+    bg = loadImage("images/garden.png");
+    tomImg1=loadAnimation("images/cat1.png");
+    tomImg2=loadAnimation("images/cat2.png","images/cat3.png");
+    tomImg3=loadAnimation("images/cat4.png");
+    jerryImg1=loadAnimation("images/mouse1.png");
+    jerryImg2=loadAnimation("images/mouse2.png","images/mouse3.png");
+    jerryImg3=loadAnimation("images/mouse4.png");
 }
 
-
 function setup(){
-    canvas = createCanvas(800,600);
+    createCanvas(1000,800);
+    //create tom and jerry sprites here
 
-    block1 = createSprite(0,580,360,30);
-    block1.shapeColor = "blue";
+    tom=createSprite(870,600);
+    tom.addAnimation("tomSleeping",tomImg1);
+    tom.scale = 0.2;
 
-    block2 = createSprite(295,580,200,30);
-    block2.shapeColor = "orange";
+    jerry=createSprite(200,600);
+    jerry.addAnimation("jerryStanding",jerryImg1);
+    jerry.scale = 0.15;
 
-    //create two more blocks i.e. block3 and block4 here
 
-    block3 = createSprite(520,580,200,30);
-    block3.shapeColor = "red";
 
-    block4 = createSprite(740,580,200,30);
-    block4.shapeColor = "green";
-
-    ball = createSprite(random(20,750),100, 40,40);
-    ball.shapeColor = rgb(255,255,255);
-    //write code to add velocityX and velocityY
-
-    ball.x = 0.5;
 
 }
 
 function draw() {
-    background(rgb(169,169,169));
-    edges=createEdgeSprites();
-    ball.bounceOff(edges);
 
-    
-    //write code to bounce off ball from the block1 
-    if(block1.isTouching(ball) && ball.bounceOff(block1)){
-        ball.shapeColor = "blue";
-        music.play();
-    }
+    background(bg);
+    //Write condition here to evalute if tom and jerry collide
 
-
-
-    if(block2.isTouching(ball)){
-        ball.shapeColor = "orange";
-        //write code to set velocityX and velocityY of ball as 0
-
-        //write code to stop music
-        if(block2.isTouching(ball) && ball.bounceOff(block2)){
-            ball.shapeColor = "orange";
-            music.stop();
-        }
-    }
-
-    //write code to bounce off ball from the block3
-    if(block3.isTouching(ball) && ball.bounceOff(block3)){
-        ball.shapeColor = "red";
-        music.play();
-    }
-
-
-    //write code to bounce off ball from the block4
-    if(block4.isTouching(ball) && ball.bounceOff(block4)){
-        ball.shapeColor = "green";
-        music.play();
+    if(tom.x - jerry.x < (tom.width - jerry.width)/2){
+        
+        tom.velocityX=0;
+        tom.addAnimation("tomLastImage",tomImg3);
+        tom.x=300;
+        tom.scale = 0.2;
+        tom.changeAnimatiom("tomLastImage");
+        jerry.addAnimation("jerryLastImage",jerryImg3);
+        jerry.scale = 0.15;
+        jerry.changeAnimatiom("jerryLastImage");
     }
 
     drawSprites();
+}
+
+
+function keyPressed(){
+
+  //For moving and changing animation write code here
+
+  if(keyCode === LEFT_ARROW){
+      tom.velocityX = -5;
+      tom.addAnimation("tomRuning",tomImg2);
+      tom.changeAnimatiom("tomRunning")
+
+      jerry.addAnimation("jerryTeasing",jerryImg2);
+      jerry.frameDelay = 25;
+      jerry.changeAnimatiom("jerryTeasing");    
+
+  }
+
+
 }
